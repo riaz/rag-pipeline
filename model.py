@@ -15,8 +15,14 @@ def load_text_file(path):
     except Exception as e:
         raise Error("Unable to open the file")
 
-# Step 2 - load_text_directory (not yet solved)
-# TODO: implement
+# Step 2 - load_text_directory
+import glob
+import os
+
+def load_text_directory(directory):
+    # TODO: read every .txt file in `directory` and return their contents as a list of strings
+    paths = sorted(glob.glob(os.path.join(directory, "*.txt")))
+    return [load_text_file(p) for p in paths]
 
 # Step 3 - extract_text_from_html (not yet solved)
 # TODO: implement
