@@ -24,8 +24,40 @@ def load_text_directory(directory):
     paths = sorted(glob.glob(os.path.join(directory, "*.txt")))
     return [load_text_file(p) for p in paths]
 
-# Step 3 - extract_text_from_html (not yet solved)
-# TODO: implement
+# Step 3 - extract_text_from_html
+from html.parser import HTMLParser
+
+
+class _TextExtractor(HTMLParser):
+    def __init__(self):
+        super().__init__()
+        self._result = []
+        self._skip = False
+
+    def handle_starttag(self, tag, attrs):
+        if tag in ("script", "style"):
+            self._skip = True
+
+    def handle_endtag(self, tag):
+        if tag in ("script", "style"):
+            self._skip = False
+
+    def handle_data(self, data):
+        if not self._skip:
+            self._result.append(data)
+
+    def handle_entityref(self, name):
+        if not self._skip:
+            self._result.append(self.unescape(f"&{name};"))
+
+    def get_text(self):
+        return "".join(self._result)
+
+
+def extract_text_from_html(html):
+    parser = _TextExtractor()
+    parser.feed(html)
+    return parser.get_text()
 
 # Step 4 - normalize_text (not yet solved)
 # TODO: implement
