@@ -59,8 +59,14 @@ def extract_text_from_html(html):
     parser.feed(html)
     return parser.get_text()
 
-# Step 4 - normalize_text (not yet solved)
-# TODO: implement
+# Step 4 - normalize_text
+import unicodedata
+import re
+
+def normalize_text(text):
+    text = unicodedata.normalize("NFKC", text)
+    text = re.sub(r"\s+", " ", text)
+    return text.strip()
 
 # Step 5 - make_document (not yet solved)
 # TODO: implement
